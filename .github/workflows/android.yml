@@ -9,8 +9,7 @@ name: Build Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ "master" ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
