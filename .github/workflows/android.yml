@@ -8,8 +8,8 @@
 name: Build Release
 
 on:
-  push:
-    branches: [ "master" ]
+  release:
+    types: [published]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -42,21 +42,13 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           ALIAS_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         timeout-minutes: 10
-      - name: Create github release
-        id: github_release
-        uses: actions/create-release@v1.1.4
+      - name: Gzip
+        run: |
+          tar -czvf http-server.tar.gz app/build/outputs/apk/release/app-release.apk
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: http-server.tar.gz application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${GITHUB_REF#refs/*/}
-          release_name: Release $(cat app/build.gradle | grep 'versionName ' | sed -e "s/^.*[[:blank:]]//" -e "s/^\"//" -e "s/\"$//")
-          body: <MY RELEASE NOTES>
-      - name: Upload release binary
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.github_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/release/app-release.apk
-          asset_name: app-release.apk
-          asset_content_type: application/octet-stream
+
