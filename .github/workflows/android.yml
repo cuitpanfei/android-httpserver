@@ -23,15 +23,7 @@ jobs:
       # 打包release
     - name: Build with Gradle
       run: bash ./gradlew assembleRelease
-    - name: Create Release
-      # You may pin to the exact commit or the version.
-      # uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e
-      uses: ncipollo/release-action@v1.12.0
-      with:
-        tag: ${{ github.ref }}
-        name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+
     # 上传至release的资源
     - name: Upload Release Asset
       id: upload-release-asset 
