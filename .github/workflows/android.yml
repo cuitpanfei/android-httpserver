@@ -28,8 +28,8 @@ jobs:
       # uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e
       uses: ncipollo/release-action@v1.12.0
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag: ${{ github.ref }}
+        name: Release ${{ github.ref }}
         draft: false
         prerelease: false
     # 上传至release的资源
